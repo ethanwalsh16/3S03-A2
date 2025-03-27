@@ -12,7 +12,7 @@
 \setlength{\parindent}{0pt}
 
 \title{3S03 Assignment 3}
-\author{Ethan Walsh - 400383566 - walshe11 \\ Ahsan Muzammil - -}
+\author{Ethan Walsh - 400383566 - walshe11 \\ Ahsan Muzammil - 400455916 - muzammia}
 
 \begin{document}
 \maketitle
@@ -44,9 +44,165 @@ General planning ideas:
 
 \section*{Question 2}
 
-Contract - weakest precondition, strongest postcondition for all methods.
+Contract - weakest precondition, strongest postcondition for all methods. \\
 
-Class invariant (idea): speed $\in \mathbb{Z}$, direction $\in \mathbb{Z}$ $\land \in [0,359]$
+Class invariant:
+\begin{itemize}
+    \item \( \text{speed} \in \mathbb{Z} \) (speed is always non-negative)
+    \item \( \text{direction} \in [0,360) \wedge \text{direction} \in \mathbb{Z} \) (direction is always a valid angle)
+    \item \( \text{speedX} = \text{speed} \cdot \cos(\text{direction}) \)
+    \item \( \text{speedY} = \text{speed} \cdot \sin(\text{direction}) \)
+\end{itemize}
+
+
+\subsection*{\texttt{public Velocity()}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item No input constraints (default constructor).
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item \( \text{speed} = 0 \), \( \text{speedX} = 0 \), \( \text{speedY} = 0 \).
+    \item \( \text{direction} \) is initialized to a default value (e.g., 0).
+\end{itemize}
+
+
+\subsection*{\texttt{public Velocity(Speed speed, Direction direction)}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item \( \text{speed} \in \mathbb{Z} \)
+    \item \( \text{direction} \in \mathbb{Z} \wedge \text{direction} \in [0,360) \)
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item \( \text{this.speed} = \text{speed} \)
+    \item \( \text{this.direction} = \text{direction} \)
+    \item \( \text{this.speedX} = \text{speed} \cdot \cos(\text{direction}) \)
+    \item \( \text{this.speedY} = \text{speed} \cdot \sin(\text{direction}) \)
+\end{itemize}
+
+
+\subsection*{\texttt{public Speed getSpeed()}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item \( \text{speed} \in \mathbb{Z} \).
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item Returns \( \text{speed} \).
+    \item \( \text{this.speed} = \frac{\text{speedX}}{\cos(\text{direction})} \).
+    \item \( \text{this.speed} = \frac{\text{speedY}}{\sin(\text{direction})} \).
+\end{itemize}
+
+
+\subsection*{\texttt{public Speed getSpeedX()}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item \( \text{speedX} \in \mathbb{Z} \).
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item Returns \( \text{speedX} \text{ and this.speedX} = \text{speed} \cdot \cos(\text{direction}) \).
+\end{itemize}
+
+
+\subsection*{\texttt{public Speed getSpeedY()}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item \( \text{speedY} \in \mathbb{Z} \).
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item Returns \( \text{speedY} \text{ and this.speedY} = \text{speed} \cdot \sin(\text{direction}) \).
+\end{itemize}
+
+
+\subsection*{\texttt{public Direction getDirection()}}
+\textbf{Pre-condition:}
+\begin{itemize}
+     \item \( \text{direction} \in \mathbb{Z} \wedge \text{direction} \in [0,360) \)
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item Returns \( \text{direction} \text{, this.direction} = \text{direction, and direction} \in [0,360) \wedge \text{direction} \in \mathbb{Z} \).
+\end{itemize}
+
+
+\subsection*{\texttt{public void setSpeed(Speed speed)}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item \( \text{speed} \in \mathbb{Z} \)
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item \( \text{this.speed} = \text{speed} \)
+    \item \( \text{this.speedX} = \text{speed} \cdot \cos(\text{direction}) \)
+    \item \( \text{this.speedY} = \text{speed} \cdot \sin(\text{direction}) \)
+\end{itemize}
+
+
+\subsection*{\texttt{public void setDirection(Direction direction)}}
+\textbf{Pre-condition:}
+\begin{itemize}
+     \item \( \text{direction} \in \mathbb{Z} \wedge \text{direction} \in [0,360) \)
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item \( \text{this.direction} = \text{direction} \)
+    \item \( \text{this.speedX} = \text{speed} \cdot \cos(\text{direction}) \)
+    \item \( \text{this.speedY} = \text{speed} \cdot \sin(\text{direction}) \)
+\end{itemize}
+
+
+\subsection*{\texttt{public void reverse()}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item \( \text{speedX} \in \mathbb{Z} \).
+    \item \( \text{speedY} \in \mathbb{Z} \).
+    \item \( \text{direction} \in \mathbb{Z} \wedge \text{direction} \in [0,360) \)
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item \( \text{this.direction} \) = \( (\text{direction} + 180) \% 360 \).
+    \item \( \text{this.speedX} = \text{speed} \cdot \cos(\text{direction}) \)
+    \item \( \text{this.speedY} = \text{speed} \cdot \sin(\text{direction}) \)
+    \item \( \text{direction} \in [0,360) \wedge \text{direction} \in \mathbb{Z} \)
+\end{itemize}
+
+\subsection*{\texttt{public void reverseX()}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item \( \text{speedX} \in \mathbb{Z} \).
+    \item \( \text{direction} \in \mathbb{Z} \wedge \text{direction} \in [0,360) \)
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item \( \text{this.speedX} = -\text{speedX} \).
+    \item \( \text{this.direction} \) = \( (180 - \text{direction}) \) \% 360.
+\end{itemize}
+
+\subsection*{\texttt{public void reverseY()}}
+\textbf{Pre-condition:}
+\begin{itemize}
+    \item \( \text{speedY} \in \mathbb{Z} \).
+    \item \( \text{direction} \in \mathbb{Z} \wedge \text{direction} \in [0,360) \)
+\end{itemize}
+
+\textbf{Post-condition:}
+\begin{itemize}
+    \item \( \text{this.speedY} = -\text{speedY} \).
+    \item \( \text{this.direction} \) = \( (-\text{direction}) \) \% 360.
+\end{itemize}
 
 \section*{Question 3}
 
