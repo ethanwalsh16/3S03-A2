@@ -8,6 +8,22 @@
 \usepackage{tikz}
 \usepackage{amsfonts}
 \usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{
+    language=Java,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{green!50!black},
+    commentstyle=\color{gray},
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    frame=single,
+    tabsize=4,
+    showstringspaces=false
+}
 
 \setlength{\parindent}{0pt}
 
@@ -209,4 +225,71 @@ Class invariant:
 Informally defined set of test cases for:
 
 setDirection (1), setSpeed (1), reverse (5), reverseX (5)
+
+\begin{lstlisting}
+    public class TestVelocity
+    {
+        @Test
+        public void testSetDirection()
+        {
+            Velocity puck = new Velocity(5, 90);
+            puck.setDirection(180);
+            assertEquals(180, puck.getDirection());
+        }
+
+        @Test
+        public void testSetSpeed()
+        {
+            Velocity puck = new Velocity(5, 90);
+            puck.setSpeed(10);
+            assertEquals(10, puck.getSpeed());
+        }
+
+        @Test
+        public void testReverseWithCurrentDirectionOnXAxisOnly()
+        {
+            Velocity puck = new Velocity(5, 0);
+            puck.reverse();
+            assertEquals(180, puck.getDirection());
+            
+        }
+
+        @Test
+        public void testReverseWithCurrentDirectionOnYAxisOnly()
+        {
+            Velocity puck = new Velocity(5, 90);
+            puck.reverse();
+            assertEquals(270, puck.getDirection());
+            
+        }
+
+        @Test
+        public void testReverseWithCurrentDirectionOnDiagonalLessThan180()
+        {
+            Velocity puck = new Velocity(5, 45);
+            puck.reverse();
+            assertEquals(225, puck.getDirection());
+            
+        }
+
+        @Test
+        public void testReverseWithCurrentDirectionOnDiagonalGreaterThan180()
+        {
+            Velocity puck = new Velocity(5, 190);
+            puck.reverse();
+            assertEquals(10, puck.getDirection());
+            
+        }
+
+        @Test
+        public void testReverseWithCurrentDirectionEqualTo359()
+        {
+            Velocity puck = new Velocity(5, 359);
+            puck.reverse();
+            assertEquals(179, puck.getDirection());
+            
+        }
+    }
+\end{lstlisting}
+
 \end{document}
