@@ -32,6 +32,7 @@
 
 \begin{document}
 \maketitle
+\newpage
 \section*{Question 1}
 
 \begin{table}[h]
@@ -40,31 +41,24 @@
     \centering
     \begin{tabularx}{\textwidth}{ |X|X| } 
         \hline
-        \textbf{Class Objectives} & Ensure that all methods and constructors meet expected behaviour. This includes usual operations such as getting and setting the direction, speed, and its components (speedX and speedY). Boundary values and unexpected inputs should be tested for a complete and robust test suite. \\ 
+        \textbf{Class Objectives} & Ensure that all methods and constructors meet expected behaviour. This includes usual operations such as getting and setting the direction, speed, and its components (\textsc{speedX} and \textsc{speedY}). Boundary values and unexpected inputs should also be tested in order to guarantee complete and robust test suite. \\ 
         \hline
-        \textbf{Inspection/Review Requirements} & May require inspection in order to understand the interface implementations - for example, how the components (speedX and speedY) are calculated. This will give the test developers a better idea of what to target, taking advantage of any vulnerabilities that can be seen during white box testing. \\ 
+        \textbf{Inspection/Review Requirements} & This class may require inspection in order to understand the interface implementations - for example, how the components (\textsc{speedX} and \textsc{speedY}) are calculated as well as how specific methods such as \textsc{reverse} are performed. This will give the test developers a better idea of what to target in their testing, taking advantage of any expected vulnerabilities that are found during exploration. include bit abt quality analysis here? code smells, ensuring things are maintainable etc. \\ 
         \hline
-        \textbf{Specification-Based Testing Objectives} & Assuming this is more aligned with the game's function (reversing direction when at a boundary, speedY remains the same and speedX is multiplied by -1 when colliding with side walls). \\ 
+        \textbf{Specification-Based Testing Objectives} & Specification-Based Testing will target the behaviour outlined in the game's specification and high level requirements. Tests in this section should ensure expected behaviour from each method, such as reversing speed when hitting the player, a wall, or a brick. It should also confirm the functionality of all get and set methods within the class. \\ 
         \hline
-        \textbf{Implementation-Based Testing Objectives} & May be helpful for components calculations (cosine etc.) \\ 
+        \textbf{Implementation-Based Testing Objectives} & Implementation-Based Testing Objectives will examine the inner workings of the specification by ensuring each individual function works as intended. These tests will be at a finer level of detail than those in the specification-based tier. Implementation-based tests will target individual methods usual input, boundary/edge cases, as well as unexpected inputs. An example of this would be testing \textsc{reverseX} by using input partitioning from the strong-robust quadrant.  \\ 
         \hline
-        \textbf{Interaction-Based Testing Objectives} & interaction between reverse, as well as reverseX and reverseY may be worth testing (as it's not immmediately clear why all 3 are needed, except maybe for corner hits when both components are reversed). \\ 
+        \textbf{Interaction-Based Testing Objectives} & Interaction-Based testing will ensure that methods in the class work together when needed and do not interfere with each other. An example of this would be testing the \textsc{setDirection} method and ensuring speed remains the same but velocity changes. Another relevant example would be testing the interaction between the three methods \textsc{reverse}, \textsc{reverseX}, and \textsc{reverseY} to ensure they do not introduce any reversing redundancy that would lead to inconsistent behaviour. \\ 
         \hline
     \end{tabularx}
 \end{table}
 
-General planning ideas:
-
-- For speed, input partitioning (negative max, negative integer, zero, positive integer, positive max)
-- For direction, testing overflow (going from 359 back to zero) and standard angles
-
 \section*{Question 2}
-
-Contract - weakest precondition, strongest postcondition for all methods. \\
 
 Class invariant:
 \begin{itemize}
-    \item \( \text{speed} \in \mathbb{Z} \) (speed is always non-negative)
+    \item \( \text{speed} \in \mathbb{Z}  \wedge  \text{speed} > 0 \)
     \item \( \text{direction} \in [0,360) \wedge \text{direction} \in \mathbb{Z} \) (direction is always a valid angle)
     \item \( \text{speedX} = \text{speed} \cdot \cos(\text{direction}) \)
     \item \( \text{speedY} = \text{speed} \cdot \sin(\text{direction}) \)
@@ -158,7 +152,7 @@ Class invariant:
 
 \textbf{Post-condition:}
 \begin{itemize}
-    \item \( \text{this.speed} = \text{speed} \)
+    \item \( \text{this.speed} = \text{speed}  \wedge \text{speed} \geq 0 \)
     \item \( \text{this.speedX} = \text{speed} \cdot \cos(\text{direction}) \)
     \item \( \text{this.speedY} = \text{speed} \cdot \sin(\text{direction}) \)
 \end{itemize}
@@ -222,9 +216,7 @@ Class invariant:
 
 \section*{Question 3}
 
-Informally defined set of test cases for:
-
-setDirection (1), setSpeed (1), reverse (5), reverseX (5)
+The following test cases assume that the Java Math class (\url{https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html}) has been imported and can be used for sine and cosine.
 
 \begin{lstlisting}
     public class TestVelocity
@@ -309,8 +301,8 @@ setDirection (1), setSpeed (1), reverse (5), reverseX (5)
         {
             Velocity puck = new Velocity(5, 90);
             puck.reverseX();
-            assertEquals(0, puck.getDirection());
-            assertEquals((int) (puck.getSpeed()*Math.cos(0)), puck.getSpeedX());
+            assertEquals(90, puck.getDirection());
+            assertEquals((int) (puck.getSpeed()*Math.cos(90)), puck.getSpeedX());
         }
 
         @Test
