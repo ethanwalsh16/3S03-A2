@@ -217,10 +217,13 @@ Class invariant:
 \section*{Question 3}
 
 The following test cases assume that the Java Math class (\url{https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html}) has been imported and can be used for sine and cosine.
-
+As recommended by Dr. Istvan, although it's generally considered poor practice to include multiple assert statements within a single test case, it is acceptable in this context due to the structure and nature of the Velocity class. Ideally, the puck’s speed would be represented using a separate Vector class to handle the X and Y components of the velocity vector. However, for the purposes of this implementation, using multiple assertions per test case is sufficient to verify each parameter of the class when methods such as reverseX, getSpeed, or setDirection are invoked.
 \begin{lstlisting}
     public class TestVelocity
     {
+        // Input: speed = 5, direction = 90
+        // Action: setDirection(180)
+        // Expected: getDirection() returns 180
         @Test
         public void testSetDirection()
         {
@@ -229,6 +232,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals(180, puck.getDirection());
         }
 
+        // Input: speed = 5, direction = 90
+        // Action: setSpeed(10)
+        // Expected: getSpeed() returns 10
         @Test
         public void testSetSpeed()
         {
@@ -237,6 +243,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals(10, puck.getSpeed());
         }
 
+        // Input: speed = 5, direction = 0 (x-axis right)
+        // Action: reverse()
+        // Expected: direction = 180, speedX = -5, speedY = 0
         @Test
         public void testReverseWithCurrentDirectionOnXAxisOnly()
         {
@@ -247,6 +256,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals((int) (puck.getSpeed()*Math.sin(180)), puck.getSpeedY());
         }
 
+        // Input: speed = 5, direction = 90 (y-axis up)
+        // Action: reverse()
+        // Expected: direction = 270, speedX = 0, speedY = -5
         @Test
         public void testReverseWithCurrentDirectionOnYAxisOnly()
         {
@@ -257,6 +269,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals((int) (puck.getSpeed()*Math.sin(270)), puck.getSpeedY());
         }
 
+        // Input: speed = 5, direction = 45 (northeast)
+        // Action: reverse()
+        // Expected: direction = 225, speedX = -3.53 = -4, speedY = -3.53 = -4 (int rounding)
         @Test
         public void testReverseWithCurrentDirectionOnDiagonalLessThan180()
         {
@@ -267,6 +282,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals((int) (puck.getSpeed()*Math.sin(225)), puck.getSpeedY());
         }
 
+        // Input: speed = 5, direction = 190
+        // Action: reverse()
+        // Expected: direction = 10, speedX = 4.92 = 5, speedY = 0.87 = 1 (int rounding)
         @Test
         public void testReverseWithCurrentDirectionOnDiagonalGreaterThan180()
         {
@@ -277,6 +295,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals((int) (puck.getSpeed()*Math.sin(10)), puck.getSpeedY());
         }
 
+        // Input: speed = 5, direction = 359
+        // Action: reverse()
+        // Expected: direction = 179, speedX = -5, speedY = 0.09 = 0 (int rounding)
         @Test
         public void testReverseWithCurrentDirectionEqualTo359()
         {
@@ -287,15 +308,21 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals((int) (puck.getSpeed()*Math.sin(179)), puck.getSpeedY());
         }
 
+        // Input: speed = 5, direction = 0
+        // Action: reverseX()
+        // Expected: direction = 180, speedX = -5
         @Test
         public void testReverseXWithCurrentDirectionOnXAxisOnly()
         {
             Velocity puck = new Velocity(5, 0);
             puck.reverseX();
             assertEquals(180, puck.getDirection());
-            assertEquals(180, puck.getSpeedX());
+            assertEquals(-5, puck.getSpeedX());
         }
 
+        // Input: speed = 5, direction = 90
+        // Action: reverseX()
+        // Expected: direction = 90 (unchanged), speedX = 0
         @Test
         public void testReverseXWithCurrentDirectionOnYAxisOnly()
         {
@@ -305,6 +332,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals((int) (puck.getSpeed()*Math.cos(90)), puck.getSpeedX());
         }
 
+        // Input: speed = 5, direction = 179
+        // Action: reverseX()
+        // Expected: direction = 1, speedX = 5
         @Test
         public void testReverseXWithCurrentDirectionLessThan180()
         {
@@ -314,6 +344,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals((int) (puck.getSpeed()*Math.cos(1)), puck.getSpeedX());
         }
 
+        // Input: speed = 5, direction = 225
+        // Action: reverseX()
+        // Expected: direction = 315, speedX = 3.53 = 4 (int rounding)
         @Test
         public void testReverseXWithCurrentDirectionGreaterThan180()
         {
@@ -323,6 +356,9 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
             assertEquals((int) (puck.getSpeed()*Math.cos(315)), puck.getSpeedX());
         }
 
+        // Input: speed = 5, direction = 359
+        // Action: reverseX()
+        // Expected: direction = 181, speedX = -4.99 = -5 (int rounding) 
         @Test
         public void testReverseXWithCurrentDirectionEqualTo359()
         {
@@ -333,5 +369,6 @@ The following test cases assume that the Java Math class (\url{https://docs.orac
         }
     }
 \end{lstlisting}
+
 
 \end{document}
